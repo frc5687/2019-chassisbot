@@ -13,8 +13,6 @@ public class Drive extends OutliersCommand {
         _driveTrain = driveTrain;
         _oi = oi;
         requires(_driveTrain);
-
-        logMetrics("StickSpeed", "StickRotation", "LeftPower", "RightPower", "LeftMasterAmps", "LeftFollowerAmps", "RightMasterAmps", "RightFollowerAmps");
     }
 
     @Override
