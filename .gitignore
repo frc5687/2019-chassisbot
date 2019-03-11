@@ -57,3 +57,4 @@ run/
 gradle/.launch/
 !gradle/*/*.jar
 src/main/java/org/frc5687/deepspace/robot/utils/Version.java
+src/main/java/org/frc5687/deepspace/chassisbot/utils/Version.java
