@@ -22,8 +22,10 @@ public class RobotMap {
         /*  Example:
         public static final int ARM_VICTORSP = 0;
         */
-        public static final int LEFT_DRIVE_MOTOR = 0;
-        public static final int RIGHT_DRIVE_MOTOR = 1;
+        public static final int LEFT_FRONT_DRIVE_MOTOR = 0;
+        public static final int LEFT_BACK_DRIVE_MOTOR = 1;
+        public static final int RIGHT_FRONT_DRIVE_MOTOR = 2;
+        public static final int RIGHT_BACK_DRIVE_MOTOR = 3;
     }
 
     /**

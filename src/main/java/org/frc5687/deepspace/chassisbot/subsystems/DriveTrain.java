@@ -15,8 +15,10 @@ import static org.frc5687.deepspace.chassisbot.utils.Helpers.applySensitivityFac
 import static org.frc5687.deepspace.chassisbot.utils.Helpers.limit;
 
 public class DriveTrain extends OutliersSubsystem {
-    private VictorSP _leftMotor;
-    private VictorSP _rightMotor;
+    private VictorSP _frontLeftmotor;
+    private VictorSP _backLeftmotor;
+    private VictorSP _frontRightmotor;
+    private VictorSP _backRightmotor;
 
     private OI _oi;
 
@@ -24,11 +26,16 @@ public class DriveTrain extends OutliersSubsystem {
         info("Constructing DriveTrain class.");
         _oi = robot.getOI();
 
-        _leftMotor = new VictorSP(RobotMap.PWM.LEFT_DRIVE_MOTOR);
-        _rightMotor = new VictorSP(RobotMap.PWM.RIGHT_DRIVE_MOTOR);
+        _frontLeftmotor = new VictorSP(RobotMap.PWM.LEFT_FRONT_DRIVE_MOTOR);
+        _backLeftmotor = new VictorSP(RobotMap.PWM.LEFT_BACK_DRIVE_MOTOR);
+        _frontRightmotor = new VictorSP(RobotMap.PWM.RIGHT_FRONT_DRIVE_MOTOR);
+        _backRightmotor = new VictorSP(RobotMap.PWM.RIGHT_BACK_DRIVE_MOTOR);
 
-        _leftMotor.setInverted(Constants.DriveTrain.LEFT_MOTORS_INVERTED);
-        _rightMotor.setInverted(Constants.DriveTrain.RIGHT_MOTORS_INVERTED);
+        _frontLeftmotor.setInverted(Constants.DriveTrain.LEFT_FRONT_MOTOR_INVERTED);
+        _backLeftmotor.setInverted(Constants.DriveTrain.LEFT_BACK_MOTOR_INVERTED);
+        _frontRightmotor.setInverted(Constants.DriveTrain.RIGHT_FRONT_MOTOR_INVERTED);
+        _backRightmotor.setInverted(Constants.DriveTrain.RIGHT_BACK_MOTOR_INVERTED);
+
     }
 
 
@@ -87,18 +94,20 @@ public class DriveTrain extends OutliersSubsystem {
     }
 
     public void setPower(double leftSpeed, double rightSpeed, boolean override) {
-        _leftMotor.set(leftSpeed);
-        _rightMotor.set(rightSpeed);
+        _frontLeftmotor.set(leftSpeed);
+        _backLeftmotor.set (leftSpeed);
+        _frontRightmotor.set(rightSpeed);
+        _backRightmotor.set (rightSpeed);
         metric("Power/Right", rightSpeed);
         metric("Power/Left", leftSpeed);
     }
 
     public double getLeftPower() {
-        return _leftMotor.get();
+        return _frontLeftmotor.get();
     }
 
     public double getRightPower() {
-        return _rightMotor.get();
+        return _frontRightmotor.get();
     }
 
 
