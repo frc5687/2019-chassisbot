@@ -16,10 +16,10 @@ public class Constants {
 
         public static final double CREEP_FACTOR = 0.25;
 
-        public static final boolean LEFT_FRONT_MOTOR_INVERTED = true;
-        public static final boolean LEFT_BACK_MOTOR_INVERTED = true;
-        public static final boolean RIGHT_FRONT_MOTOR_INVERTED = false;
-        public static final boolean RIGHT_BACK_MOTOR_INVERTED = false;
+        public static final boolean LEFT_FRONT_MOTOR_INVERTED = false;
+        public static final boolean LEFT_BACK_MOTOR_INVERTED = false;
+        public static final boolean RIGHT_FRONT_MOTOR_INVERTED = true;
+        public static final boolean RIGHT_BACK_MOTOR_INVERTED = true;
         public static final double TURNING_SENSITIVITY = 0.5;
     }
     public static class OI {
