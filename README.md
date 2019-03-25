@@ -37,7 +37,7 @@ Tool installation
 5. (Optional) Install WinSCP and PuTTY.
 
 Workspace setup
-===
+---
 1. Fork this project
 2. Checkout the project locally
 3. Configure the project for your team
