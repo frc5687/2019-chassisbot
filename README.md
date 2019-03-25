@@ -11,10 +11,11 @@ We use [Jaci](https://github.com/JacisNonsense)'s excellent gradlerio toolset in
 
 Standard FRC Java downloads:
 ---
+- [WPILib](https://github.com/wpilibsuite/allwpilib/releases/tag/v2019.4.1)
+
 Primary tools we use:
 ---
 - [IntelliJ](https://www.jetbrains.com/idea/download/) - our primary IDE (used in place of Eclipse / VS Code)  
-- [Gradle](https://gradle.org/releases/) - Used by Jaci's gradlerio to build the code and deploy it to the roborio  
 - [Git](https://git-scm.com/downloads) - Source-code manager  
 - [Sourcetree](https://www.sourcetreeapp.com/) - GUI for git.  This is optional, but all of our explanations will use it.  
 - [TortoiseMerge](https://tortoisesvn.net/downloads.html) - GUI for resolving merge conflicts when different programmers make changes to the same file.  Note that this is installed as part of TortoiseSVN, but we only use the TortoiseMerge component.  
@@ -22,4 +23,23 @@ Primary tools we use:
 Additional tools:  
 ---
 - [WinSCP](https://tortoisesvn.net/downloads.html) - used for remote file access to the roborio (and Raspberry Pi if you use one)  
-- [Putty](https://www.putty.org/) - used for remote terminal access to the roborio (and Raspberry Pi if you use one)  
+- [PuTTY](https://www.putty.org/) - used for remote terminal access to the roborio (and Raspberry Pi if you use one)  
+
+Setup
+===
+
+Tool installation
+---
+1. Dowload all the above tools
+2. Install WPILib first by extracting the installer from the downloaded archive and running it.  You can uncheck Visual Studio Code and C++ Compiler, but be sure that Gradle, Java JDK/JRE, Tools and Utilities, and WPILib Dependencies are checked.
+3. (Optional but recommended) Set your JAVA_HOME environment variable to the JDK installed by the WPILib installer (c:\users\pulbic\frc2019\jdk)
+4. Install IntelliJ, git, Sourcetree, and TortoiseMerge by running their installers.
+5. (Optional) Install WinSCP and PuTTY.
+
+Workspace setup
+===
+1. Fork this project
+2. Checkout the project locally
+3. Configure the project for your team
+4. Prep the project using gradlew
+5. Open the project in IntelliJ 
