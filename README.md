@@ -38,8 +38,20 @@ Tool installation
 
 Workspace setup
 ---
-1. Fork this project
-2. Checkout the project locally
+1. Fork this project (not necessary for 5687 team members)  
+ - Simply click the FOrk button above and to the right
+2. Checkout the project locally  
+ - Open SourceTree
+ - Open the "clone" dialog
+ - Paste the URL of your github project (eg, https://github.com/[yourgithubidhere]/2019-chassisbot or for 5687 team members, https://github.com/frc5687/2019-chassisbot)
+ - Enter your working folder under "Destination Path"
+ - Click Clone
 3. Configure the project for your team
+ - Navigate to your new working folder in windows explorer
+ - Edit the build.gradle file and replace 5687 with your team number
+ - In the .wpilib folder, edit the wpilib_preferences.json file and again replace 5687 with your team number 
 4. Prep the project using gradlew
-5. Open the project in IntelliJ 
+ - Open a command prompt in your new working folder
+ - run "gradlew idea" to create your intellij project
+5. Open the project in IntelliJ
+ - You can do this by simply double-clicking on the 2019-chassisbot.ipr file in your working folder
