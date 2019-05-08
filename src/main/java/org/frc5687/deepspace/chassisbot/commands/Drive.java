@@ -1,18 +1,20 @@
 package org.frc5687.deepspace.chassisbot.commands;
 
 import org.frc5687.deepspace.chassisbot.OI;
-import org.frc5687.deepspace.chassisbot.subsystems.DriveTrain;
-import org.frc5687.deepspace.chassisbot.utils.PDP;
+import org.frc5687.deepspace.chassisbot.RobotMap;
+import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
+import org.frc5687.deepspace.chassisbot.subsystems.VictorSPDriveTrain;
 
 public class Drive extends OutliersCommand {
 
     private OI _oi;
-    private DriveTrain _driveTrain;
+    private VictorSPDriveTrain _driveTrainVictor;
+    private SparkMaxDriveTrain _driveTrainSpark;
 
-    public Drive(DriveTrain driveTrain, OI oi) {
-        _driveTrain = driveTrain;
+    public Drive(VictorSPDriveTrain driveTrain, OI oi) {
+        _driveTrainVictor = driveTrain;
         _oi = oi;
-        requires(_driveTrain);
+        requires(_driveTrainSpark);
     }
 
     @Override
@@ -24,12 +26,12 @@ public class Drive extends OutliersCommand {
         // Get the rotation from the tiller
         double wheelRotation = _oi.getDriveRotation();
 
-        _driveTrain.cheesyDrive(stickSpeed, wheelRotation, _oi.isCreepPressed());
+        _driveTrainVictor.cheesyDrive(stickSpeed, wheelRotation, _oi.isCreepPressed());
 
         metric("StickSpeed", stickSpeed);
         metric("StickRotation", wheelRotation);
-        metric("LeftPower", _driveTrain.getLeftPower());
-        metric("RightPower", _driveTrain.getRightPower());
+        metric("LeftPower", _driveTrainVictor.getLeftPower());
+        metric("RightPower", _driveTrainVictor.getRightPower());
     }
 
 

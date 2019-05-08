@@ -9,7 +9,6 @@ public class Constants {
     public static final double METRIC_FLUSH_PERIOD = 1.0;
 
     public class DriveTrain {
-
         public static final double DEADBAND = 0.1;
         public static final double SPEED_SENSITIVITY = 0.80;
         public static final double ROTATION_SENSITIVITY = 0.75;
@@ -40,7 +39,7 @@ public class Constants {
     /*
      There should be a nested static class for each subsystem and for each autonomous command that needs tuning constants.
      For example:
-    public static class DriveTrain {
+    public static class VictorSPDriveTrain {
         public static final double DEADBAND = 0.3;
         public static final double SENSITIVITY_LOW_GEAR = 0.8;
         public static final double SENSITIVITY_HIGH_GEAR = 1.0;

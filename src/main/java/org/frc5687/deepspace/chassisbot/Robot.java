@@ -28,7 +28,8 @@ public class Robot extends TimedRobot implements ILoggingSource {
 
     private String _name;
     private OI _oi;
-    private DriveTrain _driveTrain;
+    private VictorSPDriveTrain _driveTrainVictor;
+    private SparkMaxDriveTrain _driveTrainSpark;
     private PDP _pdp;
 
     /**
@@ -53,7 +54,8 @@ public class Robot extends TimedRobot implements ILoggingSource {
         _pdp = new PDP();
 
         // Then subsystems....
-        _driveTrain = new DriveTrain(this);
+        _driveTrainVictor = new VictorSPDriveTrain(this);
+        _driveTrainSpark = new SparkMaxDriveTrain(this);
 
         // Must initialize buttons AFTER subsystems are allocated...
         _oi.initializeButtons(this);
@@ -144,7 +146,8 @@ public class Robot extends TimedRobot implements ILoggingSource {
         if (_updateTick >= Constants.TICKS_PER_UPDATE) {
             _updateTick = 0;
             _oi.updateDashboard();
-            _driveTrain.updateDashboard();
+            _driveTrainVictor.updateDashboard();
+            _driveTrainSpark.updateDashboard();
             _pdp.updateDashboard();
         }
     }
@@ -223,7 +226,8 @@ public class Robot extends TimedRobot implements ILoggingSource {
     public OI getOI() {
         return _oi;
     }
-    public DriveTrain getDriveTrain() { return _driveTrain; }
+    public VictorSPDriveTrain getVictorSPDriveTrain() { return _driveTrainVictor; }
+    public SparkMaxDriveTrain getSparkMaxDriveTrain() { return _driveTrainSpark; }
     public PDP getPDP() { return _pdp; }
 
 
