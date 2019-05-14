@@ -15,16 +15,23 @@ import static org.frc5687.deepspace.chassisbot.utils.Helpers.applySensitivityFac
 
 public class OI extends OutliersProxy {
     protected Gamepad _driverGamepad;
+    protected Gamepad _operatorGamepad;
     protected Button _driverRightStickButton;
 
+    private AxisButton _driverRightYAxisUpButton;
 
     public OI(){
         _driverGamepad = new Gamepad(0);
         _driverRightStickButton = new JoystickButton(_driverGamepad, Gamepad.Buttons.RIGHT_STICK.getNumber());
+        _driverRightYAxisUpButton = new AxisButton(_driverGamepad,Gamepad.Axes.RIGHT_Y.getNumber(), -.75);
+
     }
 
     public void initializeButtons(Robot robot){
 
+    }
+    public boolean isAutoTargetPressed() {
+        return _driverRightYAxisUpButton.get();
     }
 
     public double getDriveSpeed() {
@@ -36,6 +43,12 @@ public class OI extends OutliersProxy {
     public double getDriveRotation() {
         double speed = getSpeedFromAxis(_driverGamepad, Gamepad.Axes.RIGHT_X.getNumber());
         speed = applyDeadband(speed, Constants.DriveTrain.DEADBAND);
+        return speed;
+    }
+
+    public double getTurretRotation() {
+        double speed = getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_Y.getNumber());
+        speed = applyDeadband(speed, Constants.Turret.DEADBAND);
         return speed;
     }
 

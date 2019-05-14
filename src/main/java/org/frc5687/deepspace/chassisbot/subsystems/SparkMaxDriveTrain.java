@@ -1,45 +1,42 @@
 package org.frc5687.deepspace.chassisbot.subsystems;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
 import org.frc5687.deepspace.chassisbot.Robot;
 import org.frc5687.deepspace.chassisbot.RobotMap;
 import org.frc5687.deepspace.chassisbot.commands.Drive;
-import org.frc5687.deepspace.chassisbot.utils.IRDistanceSensor;
-import org.frc5687.deepspace.chassisbot.utils.PDP;
 
 import static org.frc5687.deepspace.chassisbot.Constants.DriveTrain.CREEP_FACTOR;
 import static org.frc5687.deepspace.chassisbot.utils.Helpers.applySensitivityFactor;
 import static org.frc5687.deepspace.chassisbot.utils.Helpers.limit;
 
-public class DriveTrain extends OutliersSubsystem {
-    private VictorSP _frontLeftmotor;
-    private VictorSP _backLeftmotor;
-    private VictorSP _frontRightmotor;
-    private VictorSP _backRightmotor;
+public class SparkMaxDriveTrain extends OutliersSubsystem {
+    private CANSparkMax _frontLeftSpark;
+    private CANSparkMax _frontRightSpark;
+    private CANSparkMax _backLeftSpark;
+    private CANSparkMax _backRightSpark;
 
     private OI _oi;
 
-    public DriveTrain(Robot robot) {
-        info("Constructing DriveTrain class.");
+    public SparkMaxDriveTrain (Robot robot) {
+        info("Constructing VictorSPDriveTrain class.");
         _oi = robot.getOI();
 
-        _frontLeftmotor = new VictorSP(RobotMap.PWM.LEFT_FRONT_DRIVE_MOTOR);
-        _backLeftmotor = new VictorSP(RobotMap.PWM.LEFT_BACK_DRIVE_MOTOR);
-        _frontRightmotor = new VictorSP(RobotMap.PWM.RIGHT_FRONT_DRIVE_MOTOR);
-        _backRightmotor = new VictorSP(RobotMap.PWM.RIGHT_BACK_DRIVE_MOTOR);
+        _frontLeftSpark = new CANSparkMax(RobotMap.CAN.SPARKMAX.LEFT_FRONT_NEO, CANSparkMaxLowLevel.MotorType.kBrushless);
+        _backLeftSpark = new CANSparkMax(RobotMap.CAN.SPARKMAX.LEFT_BACK_NEO, CANSparkMaxLowLevel.MotorType.kBrushless);
+        _frontRightSpark = new CANSparkMax(RobotMap.CAN.SPARKMAX.RIGHT_FRONT_NEO, CANSparkMaxLowLevel.MotorType.kBrushless);
+        _backRightSpark = new CANSparkMax(RobotMap.CAN.SPARKMAX.RIGHT_BACK_NEO, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        _frontLeftmotor.setInverted(Constants.DriveTrain.LEFT_FRONT_MOTOR_INVERTED);
-        _backLeftmotor.setInverted(Constants.DriveTrain.LEFT_BACK_MOTOR_INVERTED);
-        _frontRightmotor.setInverted(Constants.DriveTrain.RIGHT_FRONT_MOTOR_INVERTED);
-        _backRightmotor.setInverted(Constants.DriveTrain.RIGHT_BACK_MOTOR_INVERTED);
-
+        _frontLeftSpark.setInverted(Constants.DriveTrain.LEFT_FRONT_MOTOR_INVERTED);
+        _backLeftSpark.setInverted(Constants.DriveTrain.LEFT_BACK_MOTOR_INVERTED);
+        _frontRightSpark.setInverted(Constants.DriveTrain.RIGHT_FRONT_MOTOR_INVERTED);
+        _backRightSpark.setInverted(Constants.DriveTrain.RIGHT_BACK_MOTOR_INVERTED);
     }
 
 
-    @Override
+        @Override
     public void updateDashboard() {
 
     }
@@ -94,21 +91,23 @@ public class DriveTrain extends OutliersSubsystem {
     }
 
     public void setPower(double leftSpeed, double rightSpeed, boolean override) {
-        _frontLeftmotor.set(leftSpeed);
-        _backLeftmotor.set (leftSpeed);
-        _frontRightmotor.set(rightSpeed);
-        _backRightmotor.set (rightSpeed);
+        _frontLeftSpark.set(leftSpeed);
+        _backLeftSpark.set (leftSpeed);
+        _frontRightSpark.set(rightSpeed);
+        _backRightSpark.set (rightSpeed);
         metric("Power/Right", rightSpeed);
         metric("Power/Left", leftSpeed);
     }
 
     public double getLeftPower() {
-        return _frontLeftmotor.get();
+        return _frontLeftSpark.get();
     }
 
     public double getRightPower() {
-        return _frontRightmotor.get();
+        return _frontRightSpark.get();
     }
 
 
 }
+
+

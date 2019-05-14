@@ -9,7 +9,6 @@ public class Constants {
     public static final double METRIC_FLUSH_PERIOD = 1.0;
 
     public class DriveTrain {
-
         public static final double DEADBAND = 0.1;
         public static final double SPEED_SENSITIVITY = 0.80;
         public static final double ROTATION_SENSITIVITY = 0.75;
@@ -34,13 +33,33 @@ public class Constants {
         public static final double TARGET_HEIGHT = 29;
         public static final double LIMELIGHT_HEIGHT = 41.5;
         public static final double LIMELIGHT_ANGLE = 20;
+        public static final double OVERALL_LATENCY_MILLIS = 11;
+    }
+
+    public class Turret {
+        public static final double DEADBAND = 0.1;
+        public static final boolean TURRET_MOTOR_INVERTED = false;
+        public static final double MAX_SPEED = 1.0;
+        public static final double MAX_FORWARD_SPEED = MAX_SPEED;
+        public static final double MAX_REVERSE_SPEED = -MAX_SPEED;
+        public static final double DEGREES_PER_TICK = 0.0;
+        public static final double MAX_TURRET_ANGLE = 360; // in degrees
+        public static final double MID_TURRET_ANGLE = 180; // in degrees
+        public static final double MIN_TURRET_ANGLE = 0; // in degrees
+
+        public static final double ROTATION_K = 0.0125;
+
+        public static final long LOCK_TIME = 80;
+        public static final double TOLERANCE = 1;
+
+        public static final double TICKS_PER_DEGREES = 0.0;
     }
 
 
     /*
      There should be a nested static class for each subsystem and for each autonomous command that needs tuning constants.
      For example:
-    public static class DriveTrain {
+    public static class VictorSPDriveTrain {
         public static final double DEADBAND = 0.3;
         public static final double SENSITIVITY_LOW_GEAR = 0.8;
         public static final double SENSITIVITY_HIGH_GEAR = 1.0;

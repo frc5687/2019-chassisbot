@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import org.frc5687.deepspace.chassisbot.Constants;
 
 import java.util.ArrayList;
 
@@ -98,6 +99,10 @@ public class Limelight extends OutliersProxy {
 
     public double getTargetArea() { return _ta.getDouble(0); }
 
+    public double getLatency() {
+        return _tl.getDouble(0) + Constants.Limelight.OVERALL_LATENCY_MILLIS;
+    }
+
     public double getCamTran(int variable) {
         double[] camtranData = _camtran.getDoubleArray(new double[]{});
         /**
@@ -128,6 +133,9 @@ public class Limelight extends OutliersProxy {
         double tanY = Math.tan(angleY * (Math.PI / 180));
         double distance = (heightOffset)/tanY;
         return distance;
+    }
+    public boolean isTargetCentered() {
+        return (isTargetSighted() && Math.abs(getHorizontalAngle()) < Constants.Turret.TOLERANCE);
     }
 
     @Override

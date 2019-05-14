@@ -8,6 +8,15 @@ public class RobotMap {
      * Thus, you cannot have two SparkMax controllers with Id 0, but you can have a SparkMax with Id 0 and a TalonSRX with Id 0.
       */
     public static class CAN {
+        public static class SPARKMAX {
+
+            public static final int LEFT_FRONT_NEO = 2;
+            public static final int RIGHT_FRONT_NEO = 5;
+            public static final int LEFT_BACK_NEO = 3;
+            public static final int RIGHT_BACK_NEO = 1;
+            public static final int TURRET_NEO = 4;
+        }
+
 
         /*  Example:
                         public static final int LEFT_MASTER_SPARK= 1;
@@ -65,6 +74,7 @@ public class RobotMap {
      * Note that for DIO only one device can connect to each port, so the numbers should be unique.
      */
     public static class DIO {
+        public static final int TURRET_HALL = 0;
         /* Example:
         public static final int ARM_FRONT_LIMIT = 0;
         */
