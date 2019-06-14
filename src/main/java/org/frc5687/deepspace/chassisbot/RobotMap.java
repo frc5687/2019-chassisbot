@@ -33,6 +33,10 @@ public class RobotMap {
      * Note that for PCM only one device can connect to each port, so the numbers should be unique.
      */
     public static class PCM {
+        public static final int CLAW_OPEN = 4;
+        public static final int CLAW_CLOSE = 5;
+        public static final int WRIST_UP = 0;
+        public static final int WRIST_DOWN = 3;
         /* Example:
         public static final int LEFT_PINCER_OPEN = 5;
         */
@@ -65,6 +69,7 @@ public class RobotMap {
      * Note that for DIO only one device can connect to each port, so the numbers should be unique.
      */
     public static class DIO {
+        public static final int SHOCK_HALL = 1;
         /* Example:
         public static final int ARM_FRONT_LIMIT = 0;
         */

@@ -19,6 +19,7 @@ import java.io.FileReader;
 public class Robot extends OutliersRobot {
     private OI _oi;
     private DriveTrain _driveTrain;
+    private HatchIntake _hatchIntake;
     private PDP _pdp;
 
     /**
@@ -35,6 +36,7 @@ public class Robot extends OutliersRobot {
 
         // Then subsystems....
         _driveTrain = new DriveTrain(this);
+        _hatchIntake = new HatchIntake(this);
 
         // Must initialize buttons AFTER subsystems are allocated...
         _oi.initializeButtons(this);
@@ -118,6 +120,7 @@ public class Robot extends OutliersRobot {
         return _oi;
     }
     public DriveTrain getDriveTrain() { return _driveTrain; }
+    public HatchIntake getHatchIntake() { return _hatchIntake; }
     public PDP getPDP() { return _pdp; }
 
 
