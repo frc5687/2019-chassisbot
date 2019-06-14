@@ -1,6 +1,8 @@
 package org.frc5687.deepspace.chassisbot;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +30,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
     private String _name;
     private OI _oi;
+    private AHRS _imu;
     private Limelight _limelight;
     private VictorSPDriveTrain _driveTrainVictor;
     private SparkMaxDriveTrain _driveTrainSpark;
@@ -53,6 +56,9 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
         // OI must be first...
         _oi = new OI();
+        _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
+
+        _imu.zeroYaw();
 
         // then proxies...
         _pdp = new PDP();
@@ -158,6 +164,8 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
             _driveTrainVictor.updateDashboard();
             _driveTrainSpark.updateDashboard();
             _pdp.updateDashboard();
+            _turret.updateDashboard();
+            _limelight.updateDashboard();
         }
     }
 
@@ -235,6 +243,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     public OI getOI() {
         return _oi;
     }
+    public AHRS getIMU() { return _imu; }
     public VictorSPDriveTrain getVictorSPDriveTrain() { return _driveTrainVictor; }
     public SparkMaxDriveTrain getSparkMaxDriveTrain() { return _driveTrainSpark; }
     public PDP getPDP() { return _pdp; }
@@ -243,7 +252,11 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
     @Override
     public Pose getPose() {
-        return new BasicPose(_turret.getTurrentAngle());
+        return new BasicPose(_imu.getYaw(), _driveTrainSpark.getLeftDistance(), _driveTrainSpark.getRightDistance(), _driveTrainSpark.getDistance());
+    }
+
+    public Pose getTurretPose() {
+        return new TurretPose(_turret.getTurrentAngle());
     }
 
 

@@ -1,5 +1,6 @@
 package org.frc5687.deepspace.chassisbot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import org.frc5687.deepspace.chassisbot.Constants;
@@ -18,6 +19,11 @@ public class SparkMaxDriveTrain extends OutliersSubsystem {
     private CANSparkMax _backLeftSpark;
     private CANSparkMax _backRightSpark;
 
+    private CANEncoder _frontLeftEncoder;
+    private CANEncoder _frontRightEncoder;
+    private CANEncoder _backLeftEncoder;
+    private CANEncoder _backRightEncoder;
+
     private OI _oi;
 
     public SparkMaxDriveTrain (Robot robot) {
@@ -33,6 +39,11 @@ public class SparkMaxDriveTrain extends OutliersSubsystem {
         _backLeftSpark.setInverted(Constants.DriveTrain.LEFT_BACK_MOTOR_INVERTED);
         _frontRightSpark.setInverted(Constants.DriveTrain.RIGHT_FRONT_MOTOR_INVERTED);
         _backRightSpark.setInverted(Constants.DriveTrain.RIGHT_BACK_MOTOR_INVERTED);
+
+        _frontLeftEncoder = _frontLeftSpark.getEncoder();
+        _backLeftEncoder = _backLeftSpark.getEncoder();
+        _frontRightEncoder = _frontRightSpark.getEncoder();
+        _backRightEncoder = _backRightSpark.getEncoder();
     }
 
 
@@ -106,6 +117,18 @@ public class SparkMaxDriveTrain extends OutliersSubsystem {
     public double getRightPower() {
         return _frontRightSpark.get();
     }
+
+    public double getLeftTicks() {return (_frontLeftEncoder.getPosition() + _backLeftEncoder.getPosition()) / 2; }
+
+    public double getRightTicks() { return (_backLeftEncoder.getPosition() + _backRightEncoder.getPosition()) / 2; }
+
+    public double getLeftDistance() { return  getLeftTicks() * Constants.DriveTrain.LEFT_DISTANCE_PER_TICKS; }
+
+    public double getRightDistance() { return  getRightTicks() * Constants.DriveTrain.RIGHT_DISTANCE_PER_TICKS; }
+
+    public double getDistance() { return ( getLeftDistance() + getRightDistance() ) / 2; }
+
+
 
 
 }

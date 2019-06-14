@@ -18,12 +18,13 @@ public class OI extends OutliersProxy {
     protected Gamepad _operatorGamepad;
     protected Button _driverRightStickButton;
 
-    private AxisButton _driverRightYAxisUpButton;
+    private AxisButton _operatorRightYAxisUpButton;
 
     public OI(){
         _driverGamepad = new Gamepad(0);
+        _operatorGamepad = new Gamepad(1);
         _driverRightStickButton = new JoystickButton(_driverGamepad, Gamepad.Buttons.RIGHT_STICK.getNumber());
-        _driverRightYAxisUpButton = new AxisButton(_driverGamepad,Gamepad.Axes.RIGHT_Y.getNumber(), -.75);
+        _operatorRightYAxisUpButton = new AxisButton(_operatorGamepad,Gamepad.Axes.RIGHT_Y.getNumber(), -.75);
 
     }
 
@@ -31,7 +32,7 @@ public class OI extends OutliersProxy {
 
     }
     public boolean isAutoTargetPressed() {
-        return _driverRightYAxisUpButton.get();
+        return _operatorRightYAxisUpButton.get();
     }
 
     public double getDriveSpeed() {
@@ -47,7 +48,7 @@ public class OI extends OutliersProxy {
     }
 
     public double getTurretRotation() {
-        double speed = getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_Y.getNumber());
+        double speed = getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_X.getNumber());
         speed = applyDeadband(speed, Constants.Turret.DEADBAND);
         return speed;
     }

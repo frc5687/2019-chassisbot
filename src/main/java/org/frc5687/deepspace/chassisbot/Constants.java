@@ -15,11 +15,13 @@ public class Constants {
 
         public static final double CREEP_FACTOR = 0.25;
 
-        public static final boolean LEFT_FRONT_MOTOR_INVERTED = false;
-        public static final boolean LEFT_BACK_MOTOR_INVERTED = false;
-        public static final boolean RIGHT_FRONT_MOTOR_INVERTED = true;
-        public static final boolean RIGHT_BACK_MOTOR_INVERTED = true;
+        public static final boolean LEFT_FRONT_MOTOR_INVERTED = true;
+        public static final boolean LEFT_BACK_MOTOR_INVERTED = true;
+        public static final boolean RIGHT_FRONT_MOTOR_INVERTED = false;
+        public static final boolean RIGHT_BACK_MOTOR_INVERTED = false;
         public static final double TURNING_SENSITIVITY = 0.5;
+        public static final double LEFT_DISTANCE_PER_TICKS = 10;
+        public static final double RIGHT_DISTANCE_PER_TICKS = 10;
     }
     public static class OI {
         public static final double AXIS_BUTTON_THRESHHOLD = 0.2;
@@ -38,8 +40,8 @@ public class Constants {
 
     public class Turret {
         public static final double DEADBAND = 0.1;
-        public static final boolean TURRET_MOTOR_INVERTED = false;
-        public static final double MAX_SPEED = 1.0;
+        public static final boolean TURRET_MOTOR_INVERTED = true;
+        public static final double MAX_SPEED = 0.8;
         public static final double MAX_FORWARD_SPEED = MAX_SPEED;
         public static final double MAX_REVERSE_SPEED = -MAX_SPEED;
         public static final double DEGREES_PER_TICK = 0.0;
@@ -47,12 +49,12 @@ public class Constants {
         public static final double MID_TURRET_ANGLE = 180; // in degrees
         public static final double MIN_TURRET_ANGLE = 0; // in degrees
 
-        public static final double ROTATION_K = 0.0125;
+        public static final double ROTATION_K = 0.03;
 
         public static final long LOCK_TIME = 80;
         public static final double TOLERANCE = 1;
 
-        public static final double TICKS_PER_DEGREES = 0.0;
+        public static final double TICKS_PER_DEGREES = 0.2014611111111111111111111111111;
     }
 
 

@@ -44,6 +44,9 @@ public class Turret extends OutliersSubsystem {
     }
     @Override
     public void updateDashboard() {
+        metric("Turret Angle", getTurrentAngle());
+        metric("Turret Position", getTurretPosition());
+        metric("Turret Power", getTurretPower());
     }
 
     @Override
@@ -70,9 +73,13 @@ public class Turret extends OutliersSubsystem {
     public boolean isHallTriggered() {
         return _turretHall.get();
     }
+
     public double getTurretPosition() {
         return _turretEncoder.getPosition();
     }
+
+    public double getTurretPower() {return _turretSpark.get(); }
+
     public void resetTurretEncoder() {
         _angle0 = getTurrentAngle() > MID_TURRET_ANGLE ? MAX_TURRET_ANGLE : MIN_TURRET_ANGLE;
         _turretEncoder.setPosition(0);

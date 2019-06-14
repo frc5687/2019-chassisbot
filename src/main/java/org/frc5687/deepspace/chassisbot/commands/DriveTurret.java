@@ -6,6 +6,7 @@ import org.frc5687.deepspace.chassisbot.subsystems.Turret;
 import org.frc5687.deepspace.chassisbot.utils.BasicPose;
 import org.frc5687.deepspace.chassisbot.utils.Limelight;
 import org.frc5687.deepspace.chassisbot.utils.PoseTracker;
+import org.frc5687.deepspace.chassisbot.utils.TurretPose;
 
 import static org.frc5687.deepspace.chassisbot.Constants.Turret.*;
 
@@ -47,7 +48,10 @@ public class DriveTurret extends OutliersCommand {
     @Override
     protected void execute() {
         super.execute();
+
         double turretRotation = _oi.getTurretRotation();
+
+        _targetSighted = _limelight.isTargetSighted();
 
         if (_turret.isHallTriggered()) {
             if (_turret.getTurrentAngle() > MID_TURRET_ANGLE && turretRotation > 0) {
@@ -125,27 +129,31 @@ public class DriveTurret extends OutliersCommand {
 
 
         // Find the pose of the robot _when the picture was taken_
-        long timeKey = System.currentTimeMillis() - (long)_limelight.getLatency();
-        BasicPose pose = (BasicPose)_poseTracker.get(timeKey);
+//        long timeKey = System.currentTimeMillis() - (long)_limelight.getLatency();
+//        TurretPose pose = (TurretPose)_poseTracker.get(timeKey);
 
         // Get the angle from the pose if one was found--otherwise use turretAngle
-        double poseAngle = pose == null ? _turretAngle : pose.getAngle();
+//        double poseAngle = pose == null ? _turretAngle : pose.getAngle();
 
         // Now adjust the limelight angle based on the change in turretAngle from when the picture was taken to now
-        double offsetCompensation = _turretAngle - poseAngle;
-        _targetAngle = limeLightAngle - offsetCompensation;
-        if (_targetAngle > MAX_TURRET_ANGLE) {
-            _targetAngle = _targetAngle - MAX_TURRET_ANGLE;
-        } else if (_targetAngle < MIN_TURRET_ANGLE) {
-            _targetAngle = _targetAngle + MAX_TURRET_ANGLE;
-        }
-        _rotationK = _targetAngle > _prevTargetAngle ? ROTATION_K : -ROTATION_K;
+//        double offsetCompensation = _turretAngle - poseAngle;
+        _targetAngle = limeLightAngle ;
+//        _targetAngle = limeLightAngle - offsetCompensation;
+//        if (_targetAngle > MAX_TURRET_ANGLE) {
+//            _targetAngle = _targetAngle - MAX_TURRET_ANGLE;
+//        } else if (_targetAngle < MIN_TURRET_ANGLE) {
+//            _targetAngle = _targetAngle + MAX_TURRET_ANGLE;
+//        }
 
-        metric("Pose", pose==null?0:pose.getMillis());
+        _rotationK = ROTATION_K;
+
+//        metric("Pose", pose==null?0:pose.getMillis());
         metric("turretAngle", _turretAngle);
-        metric("PoseAngle", poseAngle);
+//        metric("PoseAngle", poseAngle);
         metric("LimelightAngle", limeLightAngle);
-        metric("_targetAngle", _targetAngle);
+        metric("targetAngle", _targetAngle);
+        metric("Previous Target Angle", _prevTargetAngle);
+        metric("Rotation K", _rotationK);
 
         return _targetAngle * _rotationK;
     }
