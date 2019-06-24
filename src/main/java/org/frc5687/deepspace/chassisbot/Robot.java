@@ -1,7 +1,12 @@
 package org.frc5687.deepspace.chassisbot;
 
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.frc5687.deepspace.chassisbot.commands.KillAll;
 import org.frc5687.deepspace.chassisbot.subsystems.*;
 import org.frc5687.deepspace.chassisbot.utils.*;
 
@@ -16,10 +21,24 @@ import java.io.FileReader;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends OutliersRobot {
+public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable {
+
+    public static IdentityMode identityMode = IdentityMode.competition;
+    private RioLogger.LogLevel _dsLogLevel = RioLogger.LogLevel.warn;
+    private RioLogger.LogLevel _fileLogLevel = RioLogger.LogLevel.warn;
+
+    private int _updateTick = 0;
+
+    private String _name;
     private OI _oi;
-    private DriveTrain _driveTrain;
+    private AHRS _imu;
+    private Limelight _limelight;
+    private VictorSPDriveTrain _driveTrainVictor;
+    private SparkMaxDriveTrain _driveTrainSpark;
+    private Shifter _shifter;
     private PDP _pdp;
+    private PoseTracker _poseTracker;
+
 
     /**
      * This function is setRollerSpeed when the robot is first started up and should be
@@ -27,14 +46,32 @@ public class Robot extends OutliersRobot {
      */
     @Override
     public void robotInit() {
+        loadConfigFromUSB();
+        RioLogger.getInstance().init(_fileLogLevel, _dsLogLevel);
+        metric("Branch", Version.BRANCH);
+        info("Starting " + this.getClass().getCanonicalName() + " from branch " + Version.BRANCH);
+        info("Robot " + _name + " running in " + identityMode.toString() + " mode");
+
+        // Periodically flushes metrics (might be good to configure enable/disable via USB config file)
+        new Notifier(MetricTracker::flushAll).startPeriodic(Constants.METRIC_FLUSH_PERIOD);
+
         // OI must be first...
         _oi = new OI();
+        _imu = new AHRS(SPI.Port.kMXP, (byte) 100);
+
+        _imu.zeroYaw();
 
         // then proxies...
         _pdp = new PDP();
+        _limelight = new Limelight("limelight");
+
 
         // Then subsystems....
-        _driveTrain = new DriveTrain(this);
+        _driveTrainVictor = new VictorSPDriveTrain(this);
+        _driveTrainSpark = new SparkMaxDriveTrain(this);
+        _shifter = new Shifter(this);
+
+        _poseTracker = new PoseTracker(this);
 
         // Must initialize buttons AFTER subsystems are allocated...
         _oi.initializeButtons(this);
@@ -54,8 +91,9 @@ public class Robot extends OutliersRobot {
      */
     @Override
     public void robotPeriodic() {
-        super.robotPeriodic();
+        updateDashboard();
         _oi.poll();
+        update();
     }
 
     /**
@@ -71,18 +109,39 @@ public class Robot extends OutliersRobot {
      */
     @Override
     public void autonomousInit() {
-        super.autonomousInit();
         teleopInit();
+        // _limelight.enableLEDs();
     }
 
     public void teleopInit() {
-        super.teleopInit();
+        //_limelight.disableLEDs();
     }
 
-
+    /**
+     * This function is called periodically during autonomous.
+     */
     @Override
-    protected void ourPeriodic() {
-        super.ourPeriodic();
+    public void autonomousPeriodic() {
+        ourPeriodic();
+    }
+
+    /**
+     * This function is called periodically during operator control.
+     */
+    @Override
+    public void teleopPeriodic() {
+        ourPeriodic();
+    }
+
+    private void ourPeriodic() {
+        // Example of starting a new row of metrics for all instrumented objects.
+        // MetricTracker.newMetricRowAll();
+        MetricTracker.newMetricRowAll();
+
+        if (_oi.isKillAllPressed()) {
+            new KillAll(this).start();
+        }
+
         Scheduler.getInstance().run();
     }
 
@@ -96,30 +155,154 @@ public class Robot extends OutliersRobot {
 
     @Override
     public void disabledInit() {
-        super.disabledInit();
+        //_limelight.disableLEDs();
+        RioLogger.getInstance().forceSync();
+        RioLogger.getInstance().close();
+        MetricTracker.flushAll();
     }
 
 
-    /***
-     * This function is called every n cycles by the base implementation of robotPeriodic, where n is controlled by Constants.UPDATE-TICKS.
-     * We tend to set this to 10 (or even higher!) in competition so that we don't flood SmartDashboard with updates or overload
-     * the CAN bus with sensor reading that aren't needed.  When debugging we tend to lower it to 1 for the most accurate metrics.
-     */
+    public void updateDashboard() {
+        _updateTick++;
+        if (_updateTick >= Constants.TICKS_PER_UPDATE) {
+            _updateTick = 0;
+            _oi.updateDashboard();
+            _driveTrainVictor.updateDashboard();
+            _driveTrainSpark.updateDashboard();
+            _pdp.updateDashboard();
+            _limelight.updateDashboard();
+        }
+    }
+
+
+    private void loadConfigFromUSB() {    String output_dir = "/U/"; // USB drive is mounted to /U on roboRIO
+        try {
+            String usbDir = "/U/"; // USB drive is mounted to /U on roboRIO
+            String configFileName = usbDir + "frc5687.cfg";
+            File configFile = new File(configFileName);
+            FileReader reader = new FileReader(configFile);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+            String line;
+            while ((line = bufferedReader.readLine())!=null) {
+                processConfigLine(line);
+            }
+
+            bufferedReader.close();
+            reader.close();
+        } catch (Exception e) {
+            identityMode = IdentityMode.competition;
+        }
+    }
+
+    private void processConfigLine(String line) {
+        try {
+            if (line.startsWith("#")) { return; }
+            String[] a = line.split("=");
+            if (a.length==2) {
+                String key = a[0].trim().toLowerCase();
+                String value = a[1].trim();
+                switch (key) {
+                    case "name":
+                        _name = value;
+                        metric("name", _name);
+                        break;
+                    case "mode":
+                        identityMode = IdentityMode.valueOf(value.toLowerCase());
+                        metric("mode", identityMode.toString());
+                        break;
+                    case "fileloglevel":
+                        _fileLogLevel = RioLogger.LogLevel.valueOf(value.toLowerCase());
+                        metric("fileLogLevel", _fileLogLevel.toString());
+                        break;
+                    case "dsloglevel":
+                        _dsLogLevel = RioLogger.LogLevel.valueOf(value.toLowerCase());
+                        metric("dsLogLevel", _dsLogLevel.toString());
+                        break;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    private boolean _wasShocked = false;
+
+    private void update() {
+        if (_hatchIntake.isShockTriggered()) {
+            if (!_wasShocked) {
+                _oi.pulseDriver(4);
+            }
+            _wasShocked = true;
+        } else {
+            _wasShocked = false;
+        }
+    }
     @Override
-    protected void updateDashboard() {
-        _oi.updateDashboard();
-        _driveTrain.updateDashboard();
-        _pdp.updateDashboard();
+    public void error(String message) {
+        RioLogger.error(this, message);
     }
 
+    @Override
+    public void warn(String message) {
+        RioLogger.warn(this, message);
+    }
 
+    @Override
+    public void info(String message) {
+        RioLogger.info(this, message);
+    }
+
+    @Override
+    public void debug(String message) {
+        RioLogger.debug(this, message);
+    }
 
     public OI getOI() {
         return _oi;
     }
-    public DriveTrain getDriveTrain() { return _driveTrain; }
+    public AHRS getIMU() { return _imu; }
+    public VictorSPDriveTrain getVictorSPDriveTrain() { return _driveTrainVictor; }
+    public SparkMaxDriveTrain getSparkMaxDriveTrain() { return _driveTrainSpark; }
+    public Shifter getShifter() { return _shifter; }
     public PDP getPDP() { return _pdp; }
+    public Limelight getLimelight() { return _limelight; }
+    public PoseTracker getPoseTracker() { return _poseTracker; }
 
+    @Override
+    public Pose getPose() {
+        return new BasicPose(_imu.getYaw(), _driveTrainSpark.getLeftDistance(), _driveTrainSpark.getRightDistance(), _driveTrainSpark.getDistance());
+    }
 
+    public enum IdentityMode {
+        competition(0),
+        practice(1),
+        programming(2);
 
+        private int _value;
+
+        IdentityMode(int value) {
+            this._value = value;
+        }
+
+        public int getValue() {
+            return _value;
+        }
+    }
+
+    public IdentityMode getIdentityMode() {
+        return identityMode;
+    }
+
+    public void metric(String name, boolean value) {
+        SmartDashboard.putBoolean(getClass().getSimpleName() + "/" + name, value);
+    }
+
+    public void metric(String name, String value) {
+        SmartDashboard.putString(getClass().getSimpleName() + "/" + name, value);
+    }
+
+    public void metric(String name, double value) {
+        SmartDashboard.putNumber(getClass().getSimpleName() + "/" + name, value);
+    }
 }
