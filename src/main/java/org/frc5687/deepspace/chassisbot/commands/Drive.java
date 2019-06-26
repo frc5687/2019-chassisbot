@@ -3,14 +3,19 @@ package org.frc5687.deepspace.chassisbot.commands;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
 import org.frc5687.deepspace.chassisbot.RobotMap;
+import org.frc5687.deepspace.chassisbot.subsystems.HatchIntake;
 import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
 import org.frc5687.deepspace.chassisbot.subsystems.VictorSPDriveTrain;
+import org.frc5687.deepspace.chassisbot.utils.BasicPose;
 import org.frc5687.deepspace.chassisbot.utils.Helpers;
 import org.frc5687.deepspace.chassisbot.utils.Limelight;
 import org.frc5687.deepspace.chassisbot.utils.PoseTracker;
+
+import static org.frc5687.deepspace.chassisbot.Constants.Auto.Align.STEER_K;
 
 public class Drive extends OutliersCommand {
 
@@ -43,7 +48,7 @@ public class Drive extends OutliersCommand {
 
     private int garbageCount = 0;
 
-    public Drive(SparkMaxDriveTrain driveTrain,AHRS imu, OI oi, Limelight limelight, HatchIntake hatchIntake, PoseTracker poseTracker) {
+    public Drive(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, HatchIntake hatchIntake, PoseTracker poseTracker) {
         _driveTrainSpark = driveTrain;
         _imu = imu;
         _oi = oi;
@@ -165,7 +170,21 @@ public class Drive extends OutliersCommand {
             if (garbageCount > Constants.Auto.Drive.MAX_GARBAGE) {
                 _lockout = true;
             }
+            return 0;
         }
+        garbageCount = 0;
+        double limeLightAngle = _limelight.getHorizontalAngle();
+        double yaw = _imu.getYaw();
+
+        long timeKey = System.currentTimeMillis() - (long)_limelight.getLatency();
+        BasicPose pose = (BasicPose)_poseTracker.get(timeKey);
+
+        double poseAngle = pose == null ? yaw : pose.getAngle();
+
+        double offsetCompenstaion = yaw - poseAngle;
+        double targetAngle = limeLightAngle - offsetCompenstaion;
+
+        return targetAngle * STEER_K;
     }
 
     private double limitSpeed(double speed) {
@@ -204,6 +223,16 @@ public class Drive extends OutliersCommand {
     protected boolean isFinished() {
         return false;
     }
+    private class AngleListener implements PIDOutput {
+
+        @Override
+        public void pidWrite(double output) {
+            synchronized (this) {
+                _anglePIDOut = output;
+            }
+        }
+
+    }
 
     public enum DriveState {
         normal(0),
@@ -218,4 +247,6 @@ public class Drive extends OutliersCommand {
 
         public int getValue() { return _value; }
     }
+
+
 }

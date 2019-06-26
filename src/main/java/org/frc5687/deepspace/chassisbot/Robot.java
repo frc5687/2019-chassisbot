@@ -1,12 +1,17 @@
 package org.frc5687.deepspace.chassisbot;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.PathfinderFRC;
+import jaci.pathfinder.Trajectory;
 import org.frc5687.deepspace.chassisbot.commands.KillAll;
+import org.frc5687.deepspace.chassisbot.commands.TwoHatchCloseAndFarRocket;
 import org.frc5687.deepspace.chassisbot.subsystems.*;
 import org.frc5687.deepspace.chassisbot.utils.*;
 
@@ -31,13 +36,25 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
     private String _name;
     private OI _oi;
+
     private AHRS _imu;
     private Limelight _limelight;
-    private VictorSPDriveTrain _driveTrainVictor;
+    //private VictorSPDriveTrain _driveTrainVictor;
     private SparkMaxDriveTrain _driveTrainSpark;
     private Shifter _shifter;
+    private HatchIntake _hatchIntake;
+
     private PDP _pdp;
     private PoseTracker _poseTracker;
+
+    private boolean _fmsConnected;
+
+//    private Command _autoCommand;
+
+//    private Trajectory _leftSideLeftTrajectory;
+//    private Trajectory _leftSideRightTrajectory;
+//    private Trajectory _rightSideLeftTrajectory;
+//    private Trajectory _rightSideRightTrajectory;
 
 
     /**
@@ -67,16 +84,23 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
 
         // Then subsystems....
-        _driveTrainVictor = new VictorSPDriveTrain(this);
+        //_driveTrainVictor = new VictorSPDriveTrain(this);
         _driveTrainSpark = new SparkMaxDriveTrain(this);
         _shifter = new Shifter(this);
+        _hatchIntake = new HatchIntake(this);
 
         _poseTracker = new PoseTracker(this);
+
+
 
         // Must initialize buttons AFTER subsystems are allocated...
         _oi.initializeButtons(this);
 
         // Initialize the other stuff
+        _limelight.disableLEDs();
+        _limelight.setStreamingMode(Limelight.StreamMode.PIP_SECONDARY);
+
+//        initializeTrajectories();
 
 
     }
@@ -96,6 +120,18 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         update();
     }
 
+//    private void initializeTrajectories() {
+//        var  path = "LeftFarRocket";
+//        info("Loading trajectories for " + path);
+//        _leftSideLeftTrajectory = PathfinderFRC.getTrajectory(path + ".right");
+//        _leftSideRightTrajectory = PathfinderFRC.getTrajectory(path + ".left");
+//
+//        path = "RightFarRocket";
+//        info("Loading trajectories for " + path);
+//        _rightSideLeftTrajectory = PathfinderFRC.getTrajectory(path + ".right");
+//        _rightSideRightTrajectory = PathfinderFRC.getTrajectory(path + ".left");
+//    }
+
     /**
      * This autonomous (along with the chooser code above) shows how to select
      * between different autonomous modes using the dashboard. The sendable
@@ -109,11 +145,21 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
      */
     @Override
     public void autonomousInit() {
-        teleopInit();
+        _fmsConnected =  DriverStation.getInstance().isFMSAttached();
+        _driveTrainSpark.enableBrakeMode();
+        _limelight.disableLEDs();
+        _limelight.setStreamingMode(Limelight.StreamMode.PIP_SECONDARY);
+
+        //left side
+//        _autoCommand = new TwoHatchCloseAndFarRocket(this, false, true, _leftSideLeftTrajectory, _leftSideRightTrajectory);
+        //right side
+//        _autoCommand = new TwoHatchCloseAndFarRocket(this,false,false,_rightSideLeftTrajectory, _rightSideRightTrajectory);
         // _limelight.enableLEDs();
+//        _autoCommand.start();
     }
 
     public void teleopInit() {
+        _fmsConnected =  DriverStation.getInstance().isFMSAttached();
         //_limelight.disableLEDs();
     }
 
@@ -167,7 +213,8 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         if (_updateTick >= Constants.TICKS_PER_UPDATE) {
             _updateTick = 0;
             _oi.updateDashboard();
-            _driveTrainVictor.updateDashboard();
+            //_driveTrainVictor.updateDashboard();
+            _shifter.updateDashboard();
             _driveTrainSpark.updateDashboard();
             _pdp.updateDashboard();
             _limelight.updateDashboard();
@@ -262,9 +309,11 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         return _oi;
     }
     public AHRS getIMU() { return _imu; }
-    public VictorSPDriveTrain getVictorSPDriveTrain() { return _driveTrainVictor; }
+    //public VictorSPDriveTrain getVictorSPDriveTrain() { return _driveTrainVictor; }
     public SparkMaxDriveTrain getSparkMaxDriveTrain() { return _driveTrainSpark; }
     public Shifter getShifter() { return _shifter; }
+
+    public HatchIntake getHatchIntake() { return _hatchIntake; }
     public PDP getPDP() { return _pdp; }
     public Limelight getLimelight() { return _limelight; }
     public PoseTracker getPoseTracker() { return _poseTracker; }

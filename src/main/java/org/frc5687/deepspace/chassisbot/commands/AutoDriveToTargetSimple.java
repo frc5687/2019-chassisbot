@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
+import org.frc5687.deepspace.chassisbot.subsystems.HatchIntake;
 import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
 import org.frc5687.deepspace.chassisbot.utils.BasicPose;
 import org.frc5687.deepspace.chassisbot.utils.Helpers;

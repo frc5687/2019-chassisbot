@@ -45,7 +45,7 @@ public class VictorSPDriveTrain extends OutliersSubsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new Drive(this, _oi));
+       // setDefaultCommand(new Drive(this, _oi));
     }
 
     public void cheesyDrive(double speed, double rotation, boolean creep) {

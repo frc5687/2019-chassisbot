@@ -12,16 +12,21 @@ public class Constants {
         public static final double DEADBAND = 0.1;
         public static final double SPEED_SENSITIVITY = 0.80;
         public static final double ROTATION_SENSITIVITY = 0.75;
+        public static final double ROTATION_SENSITIVITY_HIGH_GEAR = 1;
+        public static final double ROTATION_SENSITIVITY_LOW_GEAR = 1;
+        public static final double TURNING_SENSITIVITY_HIGH_GEAR = 1;
+        public static final double TURNING_SENSITIVITY_LOW_GEAR = 1;
 
         public static final double CREEP_FACTOR = 0.25;
+        public static final double LEFT_DISTANCE_PER_PULSE = 0;
+        public static final double RIGHT_DISTANCE_PER_PULSE = 0;
 
         public static final boolean LEFT_FRONT_MOTOR_INVERTED = false;
         public static final boolean LEFT_BACK_MOTOR_INVERTED = false;
         public static final boolean RIGHT_FRONT_MOTOR_INVERTED = true;
         public static final boolean RIGHT_BACK_MOTOR_INVERTED = true;
         public static final double TURNING_SENSITIVITY = 0.5;
-        public static final double LEFT_DISTANCE_PER_PULSE = 0;
-        public static final double RIGHT_DISTANCE_PER_PULSE = 0;
+
 
         public static final long LOCK_TIME = 80;
         public static final long DROPOUT_TIME = 100;
@@ -51,6 +56,13 @@ public class Constants {
 
         public static final long AUTO_WAIT_PERIOD = 500;
         public static final long MANUAL_WAIT_PERIOD = 3000;
+    }
+
+    public class Intake {
+        public static final long OPEN_CLAW_MILLI_SEC = 40;
+        public static final long CLOSE_CLAW_MILLI_SEC = 40;
+        public static final long CLAW_RAISE_WRIST_MILLI_SEC = 250;
+        public static final long CLAW_LOWER_WRIST_MILLI_SEC = 250;
     }
 
     public static class OI {
