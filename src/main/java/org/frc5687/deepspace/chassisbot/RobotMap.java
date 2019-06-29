@@ -71,6 +71,7 @@ public class RobotMap {
      * Note that for Analog only one device can connect to each port, so the numbers should be unique.
      */
     public static class Analog {
+        public static final int MODE_SWITCH = 0;
         /*
         public static final int ARM_POTENTIOMETER = 7;
          */

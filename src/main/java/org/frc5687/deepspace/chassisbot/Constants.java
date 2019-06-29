@@ -149,6 +149,10 @@ public class Constants {
         public static final double K_TURN = 0.2;
     }
 
+    public class RotarySwitch {
+        public static final double TOLERANCE = 0.02;
+    }
+
 
     /*
      There should be a nested static class for each subsystem and for each autonomous command that needs tuning constants.

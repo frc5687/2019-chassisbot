@@ -1,6 +1,8 @@
 package org.frc5687.deepspace.chassisbot;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
@@ -56,6 +58,9 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     private Trajectory _rightSideLeftTrajectory;
     private Trajectory _rightSideRightTrajectory;
 
+    private UsbCamera _driverCamera;
+
+    private AutoChooser _autoChooser;
 
     /**
      * This function is setRollerSpeed when the robot is first started up and should be
@@ -81,6 +86,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         // then proxies...
         _pdp = new PDP();
         _limelight = new Limelight("limelight");
+        _autoChooser = new AutoChooser(true);
 
 
         // Then subsystems....
@@ -99,6 +105,14 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         // Initialize the other stuff
         _limelight.disableLEDs();
         _limelight.setStreamingMode(Limelight.StreamMode.PIP_SECONDARY);
+
+        try {
+            _driverCamera = CameraServer.getInstance().startAutomaticCapture(0);
+            _driverCamera.setResolution(160, 120);
+            _driverCamera.setFPS(30);
+        } catch (Exception e) {
+            DriverStation.reportError(e.getMessage(), true);
+        }
 
         initializeTrajectories();
 
@@ -149,13 +163,21 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         _driveTrainSpark.enableBrakeMode();
         _limelight.disableLEDs();
         _limelight.setStreamingMode(Limelight.StreamMode.PIP_SECONDARY);
+        _autoCommand = null;
 
-        //left side
-//        _autoCommand = new TwoHatchCloseAndFarRocket(this, false, true, _leftSideLeftTrajectory, _leftSideRightTrajectory);
-        //right side
-        _autoCommand = new TwoHatchCloseAndFarRocket(this,false,false,_rightSideLeftTrajectory, _rightSideRightTrajectory);
-        // _limelight.enableLEDs();
-        _autoCommand.start();
+        switch (_autoChooser.getSelectedMode()) {
+            case LeftDoubleRocket:
+                //left side
+                _autoCommand = new TwoHatchCloseAndFarRocket(this, false, true, _leftSideLeftTrajectory, _leftSideRightTrajectory);
+                break;
+            case RightDoubleRocket:
+                //right side
+                _autoCommand = new TwoHatchCloseAndFarRocket(this, false, false, _rightSideLeftTrajectory, _rightSideRightTrajectory);
+                break;
+        }
+        if (_autoCommand!=null) {
+            _autoCommand.start();
+        }
     }
 
     public void teleopInit() {
@@ -211,6 +233,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     public void updateDashboard() {
         _updateTick++;
         if (_updateTick >= Constants.TICKS_PER_UPDATE) {
+            _autoChooser.updateDashboard();
             _updateTick = 0;
             _oi.updateDashboard();
             //_driveTrainVictor.updateDashboard();
