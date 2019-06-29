@@ -1,7 +1,8 @@
-package org.frc5687.deepspace.chassisbot.commands;
+package org.frc5687.deepspace.chassisbot.commands.drive;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.frc5687.deepspace.chassisbot.Robot;
+import org.frc5687.deepspace.chassisbot.commands.drive.AutoDrive;
 
 public class AutoLaunch extends CommandGroup {
     public AutoLaunch(Robot robot) {

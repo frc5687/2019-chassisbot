@@ -90,6 +90,11 @@ public class Drive extends OutliersCommand {
         if (!_oi.isAutoTargetPressed()) {
             _stickyLimit = 1.0;
             _lockout = false;
+            if (_driveState!=DriveState.normal) {
+                // Stop tracking
+                _limelight.disableLEDs();
+                _driveState = DriveState.normal;
+            }
 
             if (wheelRotation == 0 && stickSpeed != 0) {
                 if (!_angleController.isEnabled()) {
@@ -106,7 +111,7 @@ public class Drive extends OutliersCommand {
         } else {
             switch (_driveState) {
                 case normal:
-                    _limelight.setPipeline(Limelight.Pipeline.TapeTrackingLargest);
+                    _limelight.setPipeline(Limelight.Pipeline.TapeTrackingClosest);
                     _limelight.enableLEDs();
                     _driveState = DriveState.seeking;
                     _seekMax = System.currentTimeMillis() + Constants.DriveTrain.LOCK_TIME;

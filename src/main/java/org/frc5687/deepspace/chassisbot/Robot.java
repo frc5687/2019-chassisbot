@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
 import org.frc5687.deepspace.chassisbot.commands.KillAll;
-import org.frc5687.deepspace.chassisbot.commands.TwoHatchCloseAndFarRocket;
+import org.frc5687.deepspace.chassisbot.commands.drive.TwoHatchCloseAndFarRocket;
 import org.frc5687.deepspace.chassisbot.subsystems.*;
 import org.frc5687.deepspace.chassisbot.utils.*;
 
@@ -49,12 +49,12 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
     private boolean _fmsConnected;
 
-//    private Command _autoCommand;
+    private Command _autoCommand;
 
-//    private Trajectory _leftSideLeftTrajectory;
-//    private Trajectory _leftSideRightTrajectory;
-//    private Trajectory _rightSideLeftTrajectory;
-//    private Trajectory _rightSideRightTrajectory;
+    private Trajectory _leftSideLeftTrajectory;
+    private Trajectory _leftSideRightTrajectory;
+    private Trajectory _rightSideLeftTrajectory;
+    private Trajectory _rightSideRightTrajectory;
 
 
     /**
@@ -85,8 +85,8 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
 
         // Then subsystems....
         //_driveTrainVictor = new VictorSPDriveTrain(this);
-        _driveTrainSpark = new SparkMaxDriveTrain(this);
         _shifter = new Shifter(this);
+        _driveTrainSpark = new SparkMaxDriveTrain(this);
         _hatchIntake = new HatchIntake(this);
 
         _poseTracker = new PoseTracker(this);
@@ -100,7 +100,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         _limelight.disableLEDs();
         _limelight.setStreamingMode(Limelight.StreamMode.PIP_SECONDARY);
 
-//        initializeTrajectories();
+        initializeTrajectories();
 
 
     }
@@ -120,17 +120,17 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         update();
     }
 
-//    private void initializeTrajectories() {
-//        var  path = "LeftFarRocket";
-//        info("Loading trajectories for " + path);
-//        _leftSideLeftTrajectory = PathfinderFRC.getTrajectory(path + ".right");
-//        _leftSideRightTrajectory = PathfinderFRC.getTrajectory(path + ".left");
-//
-//        path = "RightFarRocket";
-//        info("Loading trajectories for " + path);
-//        _rightSideLeftTrajectory = PathfinderFRC.getTrajectory(path + ".right");
-//        _rightSideRightTrajectory = PathfinderFRC.getTrajectory(path + ".left");
-//    }
+    private void initializeTrajectories() {
+        var  path = "LeftFarRocket";
+        info("Loading trajectories for " + path);
+        _leftSideLeftTrajectory = PathfinderFRC.getTrajectory(path + ".right");
+        _leftSideRightTrajectory = PathfinderFRC.getTrajectory(path + ".left");
+
+        path = "RightFarRocket";
+        info("Loading trajectories for " + path);
+        _rightSideLeftTrajectory = PathfinderFRC.getTrajectory(path + ".right");
+        _rightSideRightTrajectory = PathfinderFRC.getTrajectory(path + ".left");
+    }
 
     /**
      * This autonomous (along with the chooser code above) shows how to select
@@ -153,9 +153,9 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         //left side
 //        _autoCommand = new TwoHatchCloseAndFarRocket(this, false, true, _leftSideLeftTrajectory, _leftSideRightTrajectory);
         //right side
-//        _autoCommand = new TwoHatchCloseAndFarRocket(this,false,false,_rightSideLeftTrajectory, _rightSideRightTrajectory);
+        _autoCommand = new TwoHatchCloseAndFarRocket(this,false,false,_rightSideLeftTrajectory, _rightSideRightTrajectory);
         // _limelight.enableLEDs();
-//        _autoCommand.start();
+        _autoCommand.start();
     }
 
     public void teleopInit() {
@@ -218,6 +218,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
             _driveTrainSpark.updateDashboard();
             _pdp.updateDashboard();
             _limelight.updateDashboard();
+            _hatchIntake.updateDashboard();
         }
     }
 

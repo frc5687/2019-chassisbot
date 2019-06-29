@@ -26,7 +26,6 @@ public class HatchIntake extends OutliersSubsystem {
     public void updateDashboard() {
         metric("Wrist", _wristSolenoid.get().name());
         metric("Claw", _clawSolenoid.get().name());
-        metric("HatchDetected", isHatchDetected());
         metric("ShockTriggered", isShockTriggered());
     }
 

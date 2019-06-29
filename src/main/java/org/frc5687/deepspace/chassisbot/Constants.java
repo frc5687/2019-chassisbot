@@ -18,13 +18,13 @@ public class Constants {
         public static final double TURNING_SENSITIVITY_LOW_GEAR = 1;
 
         public static final double CREEP_FACTOR = 0.25;
-        public static final double LEFT_DISTANCE_PER_PULSE = 0;
-        public static final double RIGHT_DISTANCE_PER_PULSE = 0;
+        public static final double LEFT_DISTANCE_PER_PULSE = 0.02526315789473684210526315789474;
+        public static final double RIGHT_DISTANCE_PER_PULSE = 0.02526315789473684210526315789474;
 
-        public static final boolean LEFT_FRONT_MOTOR_INVERTED = false;
-        public static final boolean LEFT_BACK_MOTOR_INVERTED = false;
-        public static final boolean RIGHT_FRONT_MOTOR_INVERTED = true;
-        public static final boolean RIGHT_BACK_MOTOR_INVERTED = true;
+        public static final boolean LEFT_FRONT_MOTOR_INVERTED = true;
+        public static final boolean LEFT_BACK_MOTOR_INVERTED = true;
+        public static final boolean RIGHT_FRONT_MOTOR_INVERTED = false;
+        public static final boolean RIGHT_BACK_MOTOR_INVERTED = false;
         public static final double TURNING_SENSITIVITY = 0.5;
 
 
@@ -32,7 +32,7 @@ public class Constants {
         public static final long DROPOUT_TIME = 100;
         public static final long SEEK_TIME = 500;
 
-        public static final double MAX_SPEED_IPS = 156.0;
+        public static final double MAX_SPEED_IPS = 168.0;
         public static final double CAP_SPEED_IPS = .8 * MAX_SPEED_IPS;
         public static final double MAX_ACCELERATION_IPSS = CAP_SPEED_IPS / 2;
         public static final double MAX_JERK_IPSSS = CAP_SPEED_IPS;
@@ -107,17 +107,17 @@ public class Constants {
 
             public class MaxVel {
                 public static final double MPS = 2.33; // Meters Per Second
-                public static final double IPS = 130; // Inches Per Second
+                public static final double IPS = 160; // Inches Per Second
             }
 
             public class MaxAcceleration {
                 public static final double METERS = 2; // Meters Per Second Squared
-                public static final double INCHES = 80.0;
+                public static final double INCHES = 640.0;
             }
 
             public class MaxJerk {
                 public static final double METERS = 6.0; // Meters Per Second Cubed
-                public static final double INCHES = 200.0;
+                public static final double INCHES = 2000.0;
             }
 
             public static final long STEADY_TIME = 100;
@@ -140,8 +140,8 @@ public class Constants {
     }
     public class Limelight {
         public static final double TARGET_HEIGHT = 29;
-        public static final double LIMELIGHT_HEIGHT = 41.5;
-        public static final double LIMELIGHT_ANGLE = 20;
+        public static final double LIMELIGHT_HEIGHT = 33.5;
+        public static final double LIMELIGHT_ANGLE = 0;
         public static final double OVERALL_LATENCY_MILLIS = 11;
     }
 

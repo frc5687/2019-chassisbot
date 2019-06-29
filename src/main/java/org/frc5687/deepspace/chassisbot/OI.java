@@ -54,8 +54,8 @@ public class OI extends OutliersProxy {
         _driverLeftBumper.whenPressed(new Shift(robot.getSparkMaxDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
 
         _operatorLeftTrigger.whileHeld(new HoldClawOpen(robot));
-        _operatorRightXAxisDownButton.whenPressed(new WristDown(robot.getHatchIntake()));
-        _operatorRightXAxisUpButton.whenPressed(new WristUp(robot.getHatchIntake()));
+        _operatorRightXAxisDownButton.whenPressed(new WristUp(robot.getHatchIntake()));
+        _operatorRightXAxisUpButton.whenPressed(new WristDown(robot.getHatchIntake()));
     }
 
     public boolean isAutoTargetPressed() {

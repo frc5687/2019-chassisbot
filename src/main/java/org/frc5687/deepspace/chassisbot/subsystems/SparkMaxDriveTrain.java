@@ -91,9 +91,9 @@ public class SparkMaxDriveTrain extends OutliersSubsystem implements PIDSource {
     }
 
     public void enableBrakeMode() {
-        _frontLeftSpark.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        _frontLeftSpark.setIdleMode(CANSparkMax.IdleMode.kBrake);
         _backLeftSpark.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        _frontRightSpark.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        _frontRightSpark.setIdleMode(CANSparkMax.IdleMode.kBrake);
         _frontRightSpark.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
