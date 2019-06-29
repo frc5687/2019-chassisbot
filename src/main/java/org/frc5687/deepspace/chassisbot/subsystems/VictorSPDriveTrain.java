@@ -1,40 +1,39 @@
 package org.frc5687.deepspace.chassisbot.subsystems;
 
+
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
 import org.frc5687.deepspace.chassisbot.Robot;
 import org.frc5687.deepspace.chassisbot.RobotMap;
 import org.frc5687.deepspace.chassisbot.commands.Drive;
-import org.frc5687.deepspace.chassisbot.utils.IRDistanceSensor;
-import org.frc5687.deepspace.chassisbot.utils.PDP;
 
 import static org.frc5687.deepspace.chassisbot.Constants.DriveTrain.CREEP_FACTOR;
 import static org.frc5687.deepspace.chassisbot.utils.Helpers.applySensitivityFactor;
 import static org.frc5687.deepspace.chassisbot.utils.Helpers.limit;
 
-public class DriveTrain extends OutliersSubsystem {
-    private VictorSP _frontLeftmotor;
-    private VictorSP _backLeftmotor;
-    private VictorSP _frontRightmotor;
-    private VictorSP _backRightmotor;
+public class VictorSPDriveTrain extends OutliersSubsystem {
+    private VictorSP _frontLeftVictor;
+    private VictorSP _backLeftVictor;
+    private VictorSP _frontRightVictor;
+    private VictorSP _backRightVictor;
 
     private OI _oi;
 
-    public DriveTrain(Robot robot) {
-        info("Constructing DriveTrain class.");
+    public VictorSPDriveTrain(Robot robot) {
+        info("Constructing VictorSPDriveTrain class.");
         _oi = robot.getOI();
 
-        _frontLeftmotor = new VictorSP(RobotMap.PWM.LEFT_FRONT_DRIVE_MOTOR);
-        _backLeftmotor = new VictorSP(RobotMap.PWM.LEFT_BACK_DRIVE_MOTOR);
-        _frontRightmotor = new VictorSP(RobotMap.PWM.RIGHT_FRONT_DRIVE_MOTOR);
-        _backRightmotor = new VictorSP(RobotMap.PWM.RIGHT_BACK_DRIVE_MOTOR);
+        _frontLeftVictor = new VictorSP(RobotMap.PWM.LEFT_FRONT_DRIVE_MOTOR);
+        _backLeftVictor = new VictorSP(RobotMap.PWM.LEFT_BACK_DRIVE_MOTOR);
+        _frontRightVictor = new VictorSP(RobotMap.PWM.RIGHT_FRONT_DRIVE_MOTOR);
+        _backRightVictor = new VictorSP(RobotMap.PWM.RIGHT_BACK_DRIVE_MOTOR);
 
-        _frontLeftmotor.setInverted(Constants.DriveTrain.LEFT_FRONT_MOTOR_INVERTED);
-        _backLeftmotor.setInverted(Constants.DriveTrain.LEFT_BACK_MOTOR_INVERTED);
-        _frontRightmotor.setInverted(Constants.DriveTrain.RIGHT_FRONT_MOTOR_INVERTED);
-        _backRightmotor.setInverted(Constants.DriveTrain.RIGHT_BACK_MOTOR_INVERTED);
+        _frontLeftVictor.setInverted(Constants.DriveTrain.LEFT_FRONT_MOTOR_INVERTED);
+        _backLeftVictor.setInverted(Constants.DriveTrain.LEFT_BACK_MOTOR_INVERTED);
+        _frontRightVictor.setInverted(Constants.DriveTrain.RIGHT_FRONT_MOTOR_INVERTED);
+        _backRightVictor.setInverted(Constants.DriveTrain.RIGHT_BACK_MOTOR_INVERTED);
+
 
     }
 
@@ -46,7 +45,7 @@ public class DriveTrain extends OutliersSubsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new Drive(this, _oi));
+       // setDefaultCommand(new Drive(this, _oi));
     }
 
     public void cheesyDrive(double speed, double rotation, boolean creep) {
@@ -94,20 +93,20 @@ public class DriveTrain extends OutliersSubsystem {
     }
 
     public void setPower(double leftSpeed, double rightSpeed, boolean override) {
-        _frontLeftmotor.set(leftSpeed);
-        _backLeftmotor.set (leftSpeed);
-        _frontRightmotor.set(rightSpeed);
-        _backRightmotor.set (rightSpeed);
+        _frontLeftVictor.set(leftSpeed);
+        _backLeftVictor.set (leftSpeed);
+        _frontRightVictor.set(rightSpeed);
+        _backRightVictor.set (rightSpeed);
         metric("Power/Right", rightSpeed);
         metric("Power/Left", leftSpeed);
     }
 
     public double getLeftPower() {
-        return _frontLeftmotor.get();
+        return _frontLeftVictor.get();
     }
 
     public double getRightPower() {
-        return _frontRightmotor.get();
+        return _frontRightVictor.get();
     }
 
 

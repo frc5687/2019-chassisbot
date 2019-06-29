@@ -4,7 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-
+import org.frc5687.deepspace.chassisbot.Constants;
 import java.util.ArrayList;
 
 import static org.frc5687.deepspace.chassisbot.Constants.Limelight.*;
@@ -28,7 +28,6 @@ public class Limelight extends OutliersProxy {
     NetworkTableEntry _cammode;
     NetworkTableEntry _pipeline;
     NetworkTableEntry _stream;
-
 
     public Limelight() {
         this("limelight");
@@ -78,6 +77,10 @@ public class Limelight extends OutliersProxy {
         _ledmode.setNumber(2);
     }
 
+    public void setPipeline(Pipeline pipeline) {
+        _pipeline.setNumber(pipeline.getValue());
+    }
+
     public void setPipeline(int pipeline) {
         _pipeline.setNumber(pipeline);
     }
@@ -98,6 +101,10 @@ public class Limelight extends OutliersProxy {
 
     public double getTargetArea() { return _ta.getDouble(0); }
 
+    public double getLatency() {
+        return _tl.getDouble(0) + Constants.Limelight.OVERALL_LATENCY_MILLIS;
+    }
+
     public double getCamTran(int variable) {
         double[] camtranData = _camtran.getDoubleArray(new double[]{});
         /**
@@ -109,7 +116,7 @@ public class Limelight extends OutliersProxy {
          *         roll = camtranData[5];
          */
         if (variable > camtranData.length) {
-            DriverStation.reportError("variable " + variable + " out of range " + camtranData.length, false);
+            error("variable " + variable + " out of range " + camtranData.length);
             return 0; }
         return camtranData[variable];
     }
@@ -122,8 +129,8 @@ public class Limelight extends OutliersProxy {
 
     }
     public double getTargetDistance() {
-        double heightOffset = (TARGET_HEIGHT - LIMELIGHT_HEIGHT);
-        double limeLightYAngle = Math.abs(getVerticalAngle());
+        double heightOffset = (LIMELIGHT_HEIGHT - TARGET_HEIGHT);
+        double limeLightYAngle = getVerticalAngle();
         double angleY = (LIMELIGHT_ANGLE - limeLightYAngle);
         double tanY = Math.tan(angleY * (Math.PI / 180));
         double distance = (heightOffset)/tanY;
@@ -145,6 +152,14 @@ public class Limelight extends OutliersProxy {
 //        metric("Roll", getCamTran(5));
     }
 
+    public boolean isTargetCentered() {
+        return (isTargetSighted() && Math.abs(getHorizontalAngle()) < Constants.Auto.Align.TOLERANCE);
+    }
+
+    public boolean areLEDsOn() {
+        return _ledmode.getNumber(0).doubleValue() == 3.0;
+    }
+
     public enum StreamMode {
         SIDE_BY_SIDE(0),
         PIP_MAIN(1),
@@ -162,5 +177,22 @@ public class Limelight extends OutliersProxy {
 
     }
 
+    public enum Pipeline {
+        TapeTrackingLargest(0),
+        TapeTrackingClosest(1),
+        TapeTrackingHighest(2),
+        CargoTrackingLargest(8),
+        CargoTrackingClosest(9);
+
+        private int _value;
+
+        Pipeline(int value) {
+            this._value = value;
+        }
+
+        public int getValue() {
+            return _value;
+        }
+    }
 
 }
