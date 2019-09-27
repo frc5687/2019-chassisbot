@@ -18,8 +18,8 @@ public class Constants {
         public static final double TURNING_SENSITIVITY_LOW_GEAR = 1;
 
         public static final double CREEP_FACTOR = 0.25;
-        public static final double LEFT_DISTANCE_PER_PULSE = 0.02526315789473684210526315789474;
-        public static final double RIGHT_DISTANCE_PER_PULSE = 0.02526315789473684210526315789474;
+        public static final double LEFT_DISTANCE_PER_PULSE = 0.026637069922308546059933407325;
+        public static final double RIGHT_DISTANCE_PER_PULSE = 0.026637069922308546059933407325;
 
         public static final boolean LEFT_FRONT_MOTOR_INVERTED = true;
         public static final boolean LEFT_BACK_MOTOR_INVERTED = true;

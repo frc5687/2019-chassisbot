@@ -113,7 +113,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         } catch (Exception e) {
             DriverStation.reportError(e.getMessage(), true);
         }
-
+        _driveTrainSpark.enableBrakeMode();
         initializeTrajectories();
 
 

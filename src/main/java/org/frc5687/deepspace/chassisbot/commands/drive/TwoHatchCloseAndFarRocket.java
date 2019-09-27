@@ -19,7 +19,7 @@ public class TwoHatchCloseAndFarRocket extends CommandGroup {
         addSequential(new AutoDriveToTargetSimple(robot.getSparkMaxDriveTrain(), robot.getIMU(), robot.getOI(), robot.getLimelight(), robot.getHatchIntake(), robot.getPoseTracker(), .9, false, 0, true));
         addSequential(new PointClaw(robot.getHatchIntake()));
         addSequential(new AutoDrive(robot.getSparkMaxDriveTrain(), robot.getIMU(), robot.getHatchIntake(), -4, .7, false, true, 0, "reverse 4 inches", 200));
-        addSequential(new AutoAlign(robot.getSparkMaxDriveTrain(), robot.getIMU(), left ? -175 : 175, .5, 1000, 2, "aligning to loading station"));
+        addSequential(new AutoAlign(robot.getSparkMaxDriveTrain(), robot.getIMU(), left ? -180 : 180, .5, 1000, 2, "aligning to loading station"));
         addSequential(new AutoDriveToTargetSimple(robot.getSparkMaxDriveTrain(), robot.getIMU(), robot.getOI(), robot.getLimelight(), robot.getHatchIntake(), robot.getPoseTracker(), .9, false, 0, false));
         addSequential(new GripClaw(robot.getHatchIntake()));
         addSequential(new AutoAlign(robot.getSparkMaxDriveTrain(), robot.getIMU(), left ? -179 : 179, .5, 250, 5, "aligning to rocket"));
