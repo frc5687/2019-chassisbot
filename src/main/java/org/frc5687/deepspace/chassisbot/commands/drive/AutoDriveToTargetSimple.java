@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
 import org.frc5687.deepspace.chassisbot.commands.OutliersCommand;
-import org.frc5687.deepspace.chassisbot.subsystems.HatchIntake;
 import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
 import org.frc5687.deepspace.chassisbot.utils.BasicPose;
 import org.frc5687.deepspace.chassisbot.utils.Helpers;
@@ -22,7 +21,6 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
     private AHRS _imu;
     private Limelight _limelight;
     private PoseTracker _poseTracker;
-    private HatchIntake _hatchIntake;
 
     private PIDController _angleController;
 
@@ -44,17 +42,16 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
     private double _slowSpeed;
     private double _mediumSpeed;
 
-    public AutoDriveToTargetSimple(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, HatchIntake hatchIntake, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight) {
-        this(driveTrain,imu,oi,limelight,hatchIntake,poseTracker, speed, finishFromDistance,distance, ignoreElevatorHeight, 0);
+    public AutoDriveToTargetSimple(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight) {
+        this(driveTrain,imu,oi,limelight,poseTracker, speed, finishFromDistance,distance, ignoreElevatorHeight, 0);
     }
 
-    public AutoDriveToTargetSimple(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, HatchIntake hatchIntake, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight, int pipeline) {
+    public AutoDriveToTargetSimple(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker, double speed, boolean finishFromDistance, double distance, boolean ignoreElevatorHeight, int pipeline) {
         _driveTrain = driveTrain;
         _oi = oi;
         _imu = imu;
         _limelight = limelight;
         _poseTracker = poseTracker;
-        _hatchIntake = hatchIntake;
         _speed = speed;
         _finishFromDistance = finishFromDistance;
         _distance = distance;
@@ -128,7 +125,7 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
 
 //         If autoAlignEnabled and pidControllerEnabled, send pidOut in place of wheelRotation (you may need a scale override flag as discussed earlier)
         double speed = limitSpeed(_speed);
-        if(!_oi.isOverridePressed() && _hatchIntake.isShockTriggered()) {
+        if(!_oi.isOverridePressed()) {
             _driveTrain.cheesyDrive(Math.min(speed, 0), 0, false, false);
         } else if (_driveState == DriveState.normal) {
             if (speed==0 && _angleController.isEnabled()) {
@@ -185,7 +182,7 @@ public class AutoDriveToTargetSimple extends OutliersCommand {
         if (_finishFromDistance) {
             return _limelight.getTargetDistance() <= _distance;
         }
-        return _oi.isOverridePressed() || _hatchIntake.isShockTriggered();
+        return _oi.isOverridePressed();
     }
 
     private class AngleListener implements PIDOutput {

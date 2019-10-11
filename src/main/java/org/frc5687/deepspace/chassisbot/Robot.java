@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
 import org.frc5687.deepspace.chassisbot.commands.KillAll;
-import org.frc5687.deepspace.chassisbot.commands.drive.TwoHatchCloseAndFarRocket;
 import org.frc5687.deepspace.chassisbot.subsystems.*;
 import org.frc5687.deepspace.chassisbot.utils.*;
 
@@ -44,7 +43,6 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     //private VictorSPDriveTrain _driveTrainVictor;
     private SparkMaxDriveTrain _driveTrainSpark;
     private Shifter _shifter;
-    private HatchIntake _hatchIntake;
 
     private PDP _pdp;
     private PoseTracker _poseTracker;
@@ -93,7 +91,6 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         //_driveTrainVictor = new VictorSPDriveTrain(this);
         _shifter = new Shifter(this);
         _driveTrainSpark = new SparkMaxDriveTrain(this);
-        _hatchIntake = new HatchIntake(this);
 
         _poseTracker = new PoseTracker(this);
 
@@ -168,11 +165,11 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
         switch (_autoChooser.getSelectedMode()) {
             case LeftDoubleRocket:
                 //left side
-                _autoCommand = new TwoHatchCloseAndFarRocket(this, false, true, _leftSideLeftTrajectory, _leftSideRightTrajectory);
+//                _autoCommand = new TwoHatchCloseAndFarRocket(this, false, true, _leftSideLeftTrajectory, _leftSideRightTrajectory);
                 break;
             case RightDoubleRocket:
                 //right side
-                _autoCommand = new TwoHatchCloseAndFarRocket(this, false, false, _rightSideLeftTrajectory, _rightSideRightTrajectory);
+//                _autoCommand = new TwoHatchCloseAndFarRocket(this, false, false, _rightSideLeftTrajectory, _rightSideRightTrajectory);
                 break;
         }
         if (_autoCommand!=null) {
@@ -241,7 +238,6 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
             _driveTrainSpark.updateDashboard();
             _pdp.updateDashboard();
             _limelight.updateDashboard();
-            _hatchIntake.updateDashboard();
         }
     }
 
@@ -300,14 +296,7 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     private boolean _wasShocked = false;
 
     private void update() {
-        if (_hatchIntake.isShockTriggered()) {
-            if (!_wasShocked) {
-                _oi.pulseDriver(4);
-            }
-            _wasShocked = true;
-        } else {
-            _wasShocked = false;
-        }
+
     }
     @Override
     public void error(String message) {
@@ -337,7 +326,6 @@ public class Robot extends TimedRobot implements ILoggingSource, IPoseTrackable 
     public SparkMaxDriveTrain getSparkMaxDriveTrain() { return _driveTrainSpark; }
     public Shifter getShifter() { return _shifter; }
 
-    public HatchIntake getHatchIntake() { return _hatchIntake; }
     public PDP getPDP() { return _pdp; }
     public Limelight getLimelight() { return _limelight; }
     public PoseTracker getPoseTracker() { return _poseTracker; }

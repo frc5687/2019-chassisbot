@@ -47,6 +47,25 @@ public class Constants {
         public static final double MEDIUM_SPEED = 0.6;
     }
 
+    public class Turret {
+        public static final double DEADBAND = 0.1;
+        public static final boolean TURRET_MOTOR_INVERTED = true;
+        public static final double MAX_SPEED = 0.8;
+        public static final double MAX_FORWARD_SPEED = MAX_SPEED;
+        public static final double MAX_REVERSE_SPEED = -MAX_SPEED;
+        public static final double DEGREES_PER_TICK = 0.0;
+        public static final double MAX_TURRET_ANGLE = 360; // in degrees
+        public static final double MID_TURRET_ANGLE = 180; // in degrees
+        public static final double MIN_TURRET_ANGLE = 0; // in degrees
+
+        public static final double ROTATION_K = 0.03;
+
+        public static final long LOCK_TIME = 80;
+        public static final double TOLERANCE = 1;
+
+        public static final double TICKS_PER_DEGREES = 0.2014611111111111111111111111111;
+    }
+
     public class Shifter {
         public static final long STOP_MOTOR_TIME = 60;
         public static final long SHIFT_TIME = 60;
@@ -58,12 +77,6 @@ public class Constants {
         public static final long MANUAL_WAIT_PERIOD = 3000;
     }
 
-    public class Intake {
-        public static final long OPEN_CLAW_MILLI_SEC = 40;
-        public static final long CLOSE_CLAW_MILLI_SEC = 40;
-        public static final long CLAW_RAISE_WRIST_MILLI_SEC = 250;
-        public static final long CLAW_LOWER_WRIST_MILLI_SEC = 250;
-    }
 
     public static class OI {
         public static final double AXIS_BUTTON_THRESHHOLD = 0.2;

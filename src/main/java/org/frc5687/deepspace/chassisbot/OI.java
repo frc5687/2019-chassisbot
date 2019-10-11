@@ -53,9 +53,6 @@ public class OI extends OutliersProxy {
         _driverRightBumper.whenPressed(new Shift(robot.getSparkMaxDriveTrain(), robot.getShifter(), Shifter.Gear.LOW, false));
         _driverLeftBumper.whenPressed(new Shift(robot.getSparkMaxDriveTrain(), robot.getShifter(), Shifter.Gear.HIGH, false));
 
-        _operatorLeftTrigger.whileHeld(new HoldClawOpen(robot));
-        _operatorRightXAxisDownButton.whenPressed(new WristUp(robot.getHatchIntake()));
-        _operatorRightXAxisUpButton.whenPressed(new WristDown(robot.getHatchIntake()));
     }
 
     public boolean isAutoTargetPressed() {
@@ -71,6 +68,11 @@ public class OI extends OutliersProxy {
     public double getDriveRotation() {
         double speed = getSpeedFromAxis(_driverGamepad, Gamepad.Axes.RIGHT_X.getNumber());
         speed = applyDeadband(speed, Constants.DriveTrain.DEADBAND);
+        return speed;
+    }
+    public double getTurretRotation() {
+        double speed = getSpeedFromAxis(_operatorGamepad, Gamepad.Axes.RIGHT_X.getNumber());
+        speed = applyDeadband(speed, Constants.Turret.DEADBAND);
         return speed;
     }
 

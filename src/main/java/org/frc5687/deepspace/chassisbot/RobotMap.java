@@ -14,6 +14,7 @@ public class RobotMap {
             public static final int RIGHT_FRONT_NEO = 4;
             public static final int LEFT_BACK_NEO = 3;
             public static final int RIGHT_BACK_NEO = 1;
+            public static final int TURRET_NEO = 5;
         }
 
 
@@ -44,10 +45,6 @@ public class RobotMap {
         public static final int SHIFTER_HIGH = 5;
         public static final int SHIFTER_LOW = 4;
 
-        public static final int CLAW_OPEN = 0;
-        public static final int CLAW_CLOSE = 1;
-        public static final int WRIST_UP = 3;
-        public static final int WRIST_DOWN = 2;
 
         /* Example:
         public static final int LEFT_PINCER_OPEN = 5;
@@ -86,8 +83,8 @@ public class RobotMap {
         public static final int DRIVE_LEFT_A = 4;
         public static final int DRIVE_RIGHT_B = 1;
         public static final int DRIVE_RIGHT_A = 2;
+        public static final int TURRET_HALL = 5;
 
-        public static final int SHOCK_HALL = 22;
 
         /* Example:
         public static final int ARM_FRONT_LIMIT = 0;

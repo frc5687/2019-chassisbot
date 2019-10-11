@@ -8,8 +8,6 @@ public class KillAll extends OutliersCommand {
 
     public KillAll(Robot robot) {
         requires(robot.getSparkMaxDriveTrain());
-        requires(robot.getHatchIntake());
-
         _robot = robot;
     }
 

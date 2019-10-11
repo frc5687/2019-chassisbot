@@ -117,7 +117,7 @@ public class SparkMaxDriveTrain extends OutliersSubsystem implements PIDSource {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new Drive(this, _imu, _oi,  _limelight ,_robot.getHatchIntake(), _robot.getPoseTracker()));
+        setDefaultCommand(new Drive(this, _imu, _oi,  _limelight, _robot.getPoseTracker()));
     }
 
     public void cheesyDrive(double speed, double rotation, boolean creep, boolean override) {

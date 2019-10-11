@@ -1,13 +1,10 @@
 package org.frc5687.deepspace.chassisbot.commands;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import org.frc5687.deepspace.chassisbot.Constants;
 import org.frc5687.deepspace.chassisbot.OI;
-import org.frc5687.deepspace.chassisbot.RobotMap;
-import org.frc5687.deepspace.chassisbot.subsystems.HatchIntake;
 import org.frc5687.deepspace.chassisbot.subsystems.SparkMaxDriveTrain;
 import org.frc5687.deepspace.chassisbot.subsystems.VictorSPDriveTrain;
 import org.frc5687.deepspace.chassisbot.utils.BasicPose;
@@ -25,7 +22,6 @@ public class Drive extends OutliersCommand {
     private AHRS _imu;
     private Limelight _limelight;
     private PoseTracker _poseTracker;
-    private HatchIntake _hatchIntake;
 
     private PIDController _angleController;
 
@@ -48,12 +44,11 @@ public class Drive extends OutliersCommand {
 
     private int garbageCount = 0;
 
-    public Drive(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, HatchIntake hatchIntake, PoseTracker poseTracker) {
+    public Drive(SparkMaxDriveTrain driveTrain, AHRS imu, OI oi, Limelight limelight, PoseTracker poseTracker) {
         _driveTrainSpark = driveTrain;
         _imu = imu;
         _oi = oi;
         _limelight = limelight;
-        _hatchIntake = hatchIntake;
         _poseTracker = poseTracker;
         requires(_driveTrainSpark);
     }
@@ -144,7 +139,7 @@ public class Drive extends OutliersCommand {
 
         metric("State", _driveState.name());
         stickSpeed = limitSpeed(stickSpeed);
-        if(!_oi.isOverridePressed() && _hatchIntake.isShockTriggered()) {
+        if(!_oi.isOverridePressed()) {
             _driveTrainSpark.cheesyDrive(Math.min(stickSpeed, 0), 0, false, false);
         } else if (_driveState == DriveState.normal) {
             if (wheelRotation==0 && _angleController.isEnabled()) {
