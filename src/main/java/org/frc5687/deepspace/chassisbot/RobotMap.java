@@ -15,6 +15,7 @@ public class RobotMap {
             public static final int LEFT_BACK_NEO = 3;
             public static final int RIGHT_BACK_NEO = 1;
             public static final int TURRET_NEO = 5;
+            public static final int TILT_NEO = 6;
         }
 
 
@@ -84,6 +85,7 @@ public class RobotMap {
         public static final int DRIVE_RIGHT_B = 1;
         public static final int DRIVE_RIGHT_A = 2;
         public static final int TURRET_HALL = 5;
+        public static final int TURRET_TILT_HALL = 8;
 
 
         /* Example:

@@ -44,7 +44,8 @@ public class DriveTurret extends OutliersCommand {
     }
 
     @Override
-    protected void execute() {
+    protected void execute()
+    {
         super.execute();
 
         double turretRotation = _oi.getTurretRotation();
